@@ -1,4 +1,5 @@
 ﻿using EscalationManagerWS.Data;
+using EscalationManagerWS.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,11 @@ namespace EscalationManagerWS.Logic
         public void EscalateIfNeeded()
         {
             repository.EscalateToDirector();
-            var solicitudes = repository.EscalateToRejected();
+            SendNotifications(repository.EscalateToRejected());
+        }
+
+        private void SendNotifications(IEnumerable<SolicitudVacaciones> solicitudes)
+        {
             var directorGeneral = repository.GetBoss();
 
             foreach (var solicitud in solicitudes)
