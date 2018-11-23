@@ -28,15 +28,8 @@ namespace EscalationManagerWS
         {
             // Pass in the time you want to start and the interval
             // Run the service every 24hrs at 3AM
-            var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["StartHour"]);
-            var startMinutes = Convert.ToInt32(ConfigurationManager.AppSettings["StartMinutes"]);
-            var startSeconds = Convert.ToInt32(ConfigurationManager.AppSettings["StartSeconds"]);
 
-            var runEveryHours = Convert.ToInt32(ConfigurationManager.AppSettings["RunEveryHours"]);
-            var runEveryMinutes = Convert.ToInt32(ConfigurationManager.AppSettings["RunEveryMinutes"]);
-            var runEverySeconds = Convert.ToInt32(ConfigurationManager.AppSettings["RunEverySeconds"]);
-
-            StartTimer(new TimeSpan(startHour, startMinutes, startSeconds), new TimeSpan(0, 5, 0));
+            StartTimer(new TimeSpan(3, 0, 0), new TimeSpan(24, 0, 0));
         }
 
         protected override void OnStop()

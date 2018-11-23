@@ -1,6 +1,7 @@
 ﻿//using EscalationManagerWS.Logic;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -19,7 +20,17 @@ namespace ConsoleApp1
         {
             manager = new EscalationManager();
 
-            StartTimer(new TimeSpan(9, 47, 0), new TimeSpan(0, 5, 0));
+            // Pass in the time you want to start and the interval
+            // Run the service every 24hrs at 3AM
+            var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["StartHour"]);
+            var startMinutes = Convert.ToInt32(ConfigurationManager.AppSettings["StartMinutes"]);
+            var startSeconds = Convert.ToInt32(ConfigurationManager.AppSettings["StartSeconds"]);
+
+            var runEveryHours = Convert.ToInt32(ConfigurationManager.AppSettings["RunEveryHours"]);
+            var runEveryMinutes = Convert.ToInt32(ConfigurationManager.AppSettings["RunEveryMinutes"]);
+            var runEverySeconds = Convert.ToInt32(ConfigurationManager.AppSettings["RunEverySeconds"]);
+
+            StartTimer(new TimeSpan(startHour, startMinutes, startSeconds), new TimeSpan(runEveryHours, runEveryMinutes, runEverySeconds));
         }
 
         private static void StartTimer(TimeSpan scheduledRunTime, TimeSpan timeBetweenEachRun)
