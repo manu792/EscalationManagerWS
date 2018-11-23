@@ -2,6 +2,7 @@
 using EscalationManagerWS.Data.Setup;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,12 @@ namespace EscalationManagerWS.Data
     public class Repository
     {
         private CNMContext context;
-        private const int daysBack = -1;
+        private int daysBack;
 
         public Repository()
         {
             context = new CNMContext();
+            daysBack = Convert.ToInt32(ConfigurationManager.AppSettings["Threshold"]);
         }
 
         public void EscalateToDirector()
