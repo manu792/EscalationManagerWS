@@ -19,7 +19,7 @@ namespace ConsoleApp1
         {
             manager = new EscalationManager();
 
-            StartTimer(new TimeSpan(23, 13, 0), new TimeSpan(0, 5, 0));
+            StartTimer(new TimeSpan(9, 47, 0), new TimeSpan(0, 5, 0));
         }
 
         private static void StartTimer(TimeSpan scheduledRunTime, TimeSpan timeBetweenEachRun)

@@ -22,14 +22,14 @@ namespace EscalationManagerWS.Data
 
         public void EscalateToDirector()
         {
-            var date = DateTime.Now.AddDays(daysBack);
-            var estado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("por revisar", StringComparison.OrdinalIgnoreCase));
-            var role = context.Roles.FirstOrDefault(x => x.Name.Equals("Jefatura", StringComparison.OrdinalIgnoreCase));
-            var categoriaDG = context.Categorias.FirstOrDefault(x => x.Nombre.Equals("director general", StringComparison.OrdinalIgnoreCase));
-            var directorGeneral = context.Empleados.FirstOrDefault(x => x.CategoriaId == categoriaDG.CategoriaId);
-
             try
             {
+                var date = DateTime.Now.AddDays(daysBack);
+                var estado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("por revisar", StringComparison.OrdinalIgnoreCase));
+                var role = context.Roles.FirstOrDefault(x => x.Name.Equals("Jefatura", StringComparison.OrdinalIgnoreCase));
+                var categoriaDG = context.Categorias.FirstOrDefault(x => x.Nombre.Equals("director general", StringComparison.OrdinalIgnoreCase));
+                var directorGeneral = context.Empleados.FirstOrDefault(x => x.CategoriaId == categoriaDG.CategoriaId);
+
                 var solicitudes = context.SolicitudesVacaciones.Where(x => x.UltimaActualizacion <= date &&
                 x.EstadoId == estado.EstadoId &&
                 context.Empleados.FirstOrDefault(e => e.EmpleadoId == x.AprobadorId).Roles.Any(r => r.RoleId == role.Id))
@@ -44,25 +44,26 @@ namespace EscalationManagerWS.Data
                 }
 
                 context.SaveChanges();
+                WriteLog("Ejecucion exitosa");
             }
             catch(Exception ex)
             {
                 Console.Write(ex);
+                WriteLog(ex.Message);
             }
             
         }
-
         public IEnumerable<SolicitudVacaciones> EscalateToRejected()
         {
-            var date = DateTime.Now.AddDays(daysBack);
-            var estado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("por revisar", StringComparison.OrdinalIgnoreCase));
-            var estadoRechazado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("rechazado", StringComparison.OrdinalIgnoreCase));
-            var role = context.Roles.FirstOrDefault(x => x.Name.Equals("director", StringComparison.OrdinalIgnoreCase));
-            var categoriaDG = context.Categorias.FirstOrDefault(x => x.Nombre.Equals("director general", StringComparison.OrdinalIgnoreCase));
-            var directorGeneral = context.Empleados.FirstOrDefault(x => x.CategoriaId == categoriaDG.CategoriaId);
-
             try
             {
+                var date = DateTime.Now.AddDays(daysBack);
+                var estado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("por revisar", StringComparison.OrdinalIgnoreCase));
+                var estadoRechazado = context.Estados.FirstOrDefault(x => x.Nombre.Equals("rechazado", StringComparison.OrdinalIgnoreCase));
+                var role = context.Roles.FirstOrDefault(x => x.Name.Equals("director", StringComparison.OrdinalIgnoreCase));
+                var categoriaDG = context.Categorias.FirstOrDefault(x => x.Nombre.Equals("director general", StringComparison.OrdinalIgnoreCase));
+                var directorGeneral = context.Empleados.FirstOrDefault(x => x.CategoriaId == categoriaDG.CategoriaId);
+
                 var solicitudes = context.SolicitudesVacaciones.Where(x => x.UltimaActualizacion <= date &&
                 x.EstadoId == estado.EstadoId &&
                 context.Empleados.FirstOrDefault(e => e.EmpleadoId == x.AprobadorId).Roles.Any(r => r.RoleId == role.Id))
@@ -77,12 +78,14 @@ namespace EscalationManagerWS.Data
                 }
 
                 context.SaveChanges();
+                WriteLog("Ejecucion exitosa");
 
                 return solicitudes;
             }
             catch (Exception ex)
             {
                 Console.Write(ex);
+                WriteLog(ex.Message);
                 throw;
             }
 
@@ -103,6 +106,17 @@ namespace EscalationManagerWS.Data
             var categoria = context.Categorias.FirstOrDefault(x => x.Nombre.Equals("director general", StringComparison.OrdinalIgnoreCase));
 
             return context.Empleados.FirstOrDefault(x => x.CategoriaId == categoria.CategoriaId);
+        }
+
+        private void WriteLog(string ex)
+        {
+            string exeFolder = System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+
+            using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(exeFolder + "/Log.txt", true))
+            {
+                file.WriteLine(ex);
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace EscalationManagerWS.Data.Models
     [Table("SolicitudesVacaciones")]
     public class SolicitudVacaciones
     {
-        public Guid SolicitudVacacionesId { get; set; }
+        public int SolicitudVacacionesId { get; set; }
         [Required]
         [Column("Cedula")]
         public string EmpleadoId { get; set; }
